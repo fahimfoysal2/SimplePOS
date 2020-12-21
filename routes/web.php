@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+
+    $user_level = auth()->user()->id;
+
+    switch ($user_level) {
+        case 1:
+            return view('admin/admin', compact('user_level'));
+            break;
+        case 2:
+            return view('manager/manager', compact('user_level'));
+            break;
+
+        case 3:
+            return view('seller/seller', compact('user_level'));
+            break;
+
+        default:
+            return view('home', compact('user_level'));
+
+    }
+})->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
