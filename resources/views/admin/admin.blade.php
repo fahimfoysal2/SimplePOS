@@ -2,13 +2,8 @@
 
 @section('menu')
 
-<div class="card">
-    <div class="card-header">{{ __('Menu') }}</div>
+    @include('admin/menu')
 
-    <div class="card-body">
-        {{ __('You are logged in!') }}
-    </div>
-</div>
 @endsection
 <!--left menu end-->
 
