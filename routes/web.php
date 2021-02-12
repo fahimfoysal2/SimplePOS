@@ -23,7 +23,11 @@ Route::get('logout', function (){
 });
 
 Route::get('/', [HomeController::class, 'index']);
-
 Route::get('home', [HomeController::class, 'index'])->name('home');
-Route::get('roles',[AdminController::class, 'manageRoles'])->name('manageRoles');
-Route::get('users',[AdminController::class, 'manageUsers'])->name('manageUsers');
+Route::prefix('admin')->group(function (){
+    Route::get('roles', [AdminController::class, 'manageRoles'])->name('manageRoles');
+    Route::get('users', [AdminController::class, 'manageUsers'])->name('manageUsers');
+
+    Route::get('users/remove/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
+    Route::post('users/update', [AdminController::class, 'updateUser'])->name('updateUser');
+});

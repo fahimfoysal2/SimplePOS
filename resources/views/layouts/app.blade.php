@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -88,13 +89,13 @@
     <main class="py-4">
         <div class="container ">
             <div class="row justify-content-center">
-                <!--left menu-->
+                {{--  left menu--}}
                 <div class="col-md-4">
 
                     @yield('menu')
 
                 </div>
-                <!--left menu end-->
+                {{-- left menu end --}}
 
 
                 <!-- right side content -->
@@ -109,5 +110,6 @@
 
     </main>
 </div>
+@yield('page-script')
 </body>
 </html>

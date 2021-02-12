@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -24,6 +25,48 @@ class AdminController extends Controller
 
     public function manageUsers()
     {
-        return view('admin/users');
+        $all_users = User::all();
+
+        return view('admin/users', ['users' => $all_users]);
     }
+
+    public function deleteUser($id)
+    {
+        $deleted = User::destroy($id);
+        if ($deleted){
+            session()->flash('status', 'User Removed!');
+        }else{
+            session()->flash('status', 'Task Failed!');
+        }
+
+        return redirect()->back();
+    }
+
+    public function updateUser(Request $request)
+    {
+        $user = $request->validate([
+            'user_id' => 'required',
+            'user_name' => 'required',
+            'email' => 'required'
+        ]) ;
+
+        $data_to_update['name'] = $user['user_name'];
+        $data_to_update['email'] = $user['email'];
+
+        if (isset($request->password)){
+            $data_to_update['password'] = $request->password;
+        }
+
+        $status = User::where('id', $request->user_id)
+            ->update($data_to_update);
+
+        if ($status){
+            session()->flash('status', 'User Updated!');
+        }else{
+            session()->flash('status', 'Task Failed!');
+        }
+
+        return redirect()->back();
+    }
+
 }
