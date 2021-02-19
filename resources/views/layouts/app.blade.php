@@ -24,6 +24,7 @@
         }
     </style>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -98,17 +99,24 @@
                 {{-- left menu end --}}
 
 
-                <!-- right side content -->
+                {{-- right side content --}}
                 <div class="col-md-8">
 
                     @yield('content')
 
                 </div>
-                <!-- content end -->
+                {{-- content end --}}
             </div>
         </div>
-
     </main>
+
+{{--  footer section   --}}
+    <footer class="fixed-bottom">
+        <div class="container text-center">
+            <p>&copy;2021</p>
+        </div>
+    </footer>
+{{--    footer end--}}
 </div>
 @yield('page-script')
 </body>

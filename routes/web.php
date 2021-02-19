@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,8 +27,16 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('home', [HomeController::class, 'index'])->name('home');
 Route::prefix('admin')->group(function (){
     Route::get('roles', [AdminController::class, 'manageRoles'])->name('manageRoles');
-    Route::get('users', [AdminController::class, 'manageUsers'])->name('manageUsers');
 
+    Route::get('users', [AdminController::class, 'manageUsers'])->name('manageUsers');
     Route::get('users/remove/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
     Route::post('users/update', [AdminController::class, 'updateUser'])->name('updateUser');
+});
+
+Route::prefix('product')->group(function (){
+    Route::get('manage', [ProductController::class, 'index'])
+        ->name('manageProducts');
+
+    Route::post('save', [ProductController::class, 'store'])
+        ->name('saveProduct');
 });
