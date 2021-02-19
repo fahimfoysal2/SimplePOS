@@ -54,7 +54,7 @@ class AdminController extends Controller
         $data_to_update['email'] = $user['email'];
 
         if (isset($request->password)){
-            $data_to_update['password'] = $request->password;
+            $data_to_update['password'] = bcrypt($request->password);
         }
 
         $status = User::where('id', $request->user_id)

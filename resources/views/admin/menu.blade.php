@@ -10,6 +10,10 @@
             <li>
                 <a href="{{route('manageUsers')}}">Manage Users</a>
             </li>
+
+            <li>
+                <a href="{{route('manageProducts')}}">Manage Products</a>
+            </li>
         </ul>
     </div>
 </div>

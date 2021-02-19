@@ -22,7 +22,7 @@
         </div>
         @endif
 
-        {{ __('As an Admin!') }}
+        {{ __('Admin Shortcuts and reports will be here') }}
     </div>
 </div>
 @endsection

@@ -27,7 +27,6 @@
                         <form autocomplete="off" method="post" action="{{route('updateUser')}}">
                             @csrf
                             <div class="form-group">
-                                <label for="user_id" class="col-form-label">User ID:</label>
                                 <input type="hidden" class="form-control" id="user_id" name="user_id">
                             </div>
                             <div class="form-group">
