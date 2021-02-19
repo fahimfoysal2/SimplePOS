@@ -6,3 +6,7 @@ a.edit-modal{
     text-decoration: none;
     cursor: pointer;
 }
+
+.table-wrapper{
+    overflow: auto;
+}

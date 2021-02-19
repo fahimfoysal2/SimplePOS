@@ -21,7 +21,7 @@
                 {{--                modal body with form to submit  --}}
                 <div class="modal-body">
 
-                    <form id="add-item" method="POST" action="{{route('saveProduct')}}" autocomplete="off">
+                    <form id="add-item" method="POST" action="{{route('product.save')}}" autocomplete="off">
                         @csrf
                         <div class="form-group row">
                             <label for="isbn" class="col col-form-label">ISBN</label>
@@ -147,11 +147,55 @@
             {{--main content section --}}
             <div class="row">
                 <div class="col">
-                    see product collection here...
+                    <div class="table-wrapper">
+
+                        <table class="table table-bordered product-datatable" id="data-table">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>ISBN</th>
+                                <th>Title</th>
+                                <th>Item Status</th>
+                                <th>Inventory</th>
+                                <th>Buy Price</th>
+                                <th>Sell Price</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
 
 
         </div>
     </div>
+@endsection
+
+@section('page-script')
+    <link href="//cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            var table = $('.product-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('product.all') }}",
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'isbn', name: 'isbn'},
+                    {data: 'name', name: 'name'},
+                    {data: 'item_status', name: 'item_status'},
+                    {data: 'inventory_size', name: 'inventory_size'},
+                    {data: 'buying_price', name: 'buying_price'},
+                    {data: 'selling_price', name: 'selling_price'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+        });
+
+    </script>
 @endsection

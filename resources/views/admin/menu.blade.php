@@ -12,7 +12,7 @@
             </li>
 
             <li>
-                <a href="{{route('manageProducts')}}">Manage Products</a>
+                <a href="{{route('product.manage')}}">Manage Products</a>
             </li>
         </ul>
     </div>
