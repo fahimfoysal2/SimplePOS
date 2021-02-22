@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class ProductController extends Controller
@@ -83,7 +84,7 @@ class ProductController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="edit">&#128295;</a> <a href="javascript:void(0)" data-id="' . $row->id . '" class="delete">&#10060;</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -97,9 +98,10 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $product = Product::find($request->id);
+        return response()->json($product);
     }
 
     /**
@@ -109,9 +111,42 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $product_status = '';
+        if ($request->product_status) {
+            $product_status = 1;
+        } else {
+            $product_status = 0;
+        }
 
+//        $updated = DB::table('products')
+//        ->updateOrFail([
+//            "isbn" => $request->isbn,
+//            "name" => $request->product_name,
+//            "description" => $request->product_details,
+//            "item_status" => $product_status,
+//            "buying_price" => $request->buying_price,
+//            "selling_price" => $request->selling_price,
+//            "inventory_size" => $request->inventory,
+//
+//        ])->where('id', $request->product-id-to-update);
+
+        $product = Product::find($request->product_id_to_update);
+
+        $updated = $product->fill([
+            "isbn" => $request->isbn,
+            "name" => $request->product_name,
+            "description" => $request->product_details,
+            "item_status" => $product_status,
+            "buying_price" => $request->buying_price,
+            "selling_price" => $request->selling_price,
+            "inventory_size" => $request->inventory,
+
+        ])->save();
+
+
+        return response()->json($updated);
     }
 
     /**
@@ -120,8 +155,15 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $product = Product::find($request->id);
+
+        if ($product) {
+            $product->delete();
+            return response()->json("Deleted");
+        }else{
+            return response()->json("Not Found");
+        }
     }
 }

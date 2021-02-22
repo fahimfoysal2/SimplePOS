@@ -42,4 +42,13 @@ Route::prefix('product')->group(function (){
 
     Route::get('all', [ProductController::class, 'showAll'])
         ->name('product.all');
+
+    Route::get('remove', [ProductController::class, 'destroy'])
+        ->name('product.remove');
+
+    Route::get('edit', [ProductController::class, 'edit'])
+        ->name('product.edit');
+
+    Route::post('update', [ProductController::class, 'update'])
+        ->name('product.update');
 });
