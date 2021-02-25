@@ -156,8 +156,8 @@
                             <div class="col-10 custom-control custom-switch">
                                 &nbsp;&nbsp;&nbsp;
                                 <input type="checkbox" checked class="form-control custom-control-input"
-                                       id="update-product_status" name="update-product_status">
-                                <label class="custom-control-label" for="update-product_status">Set item active or
+                                       id="update_product_status" name="update_product_status">
+                                <label class="custom-control-label" for="update_product_status">Set item active or
                                     inactive</label>
                             </div>
                         </div>
@@ -250,7 +250,7 @@
                 <div class="col">
                     <div class="table-wrapper">
 
-                        <table class="table table-bordered table-striped product-datatable" id="data-table">
+                        <table class="table table-bordered table-striped product-datatable" id="product_table">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -370,6 +370,7 @@
                 data: formData,
                 dataType: 'json',
                 success: function (data){
+                   console.log(data);
                     $('.product-datatable').DataTable().ajax.reload();
                     $('#updateProduct').modal('hide');
                 },

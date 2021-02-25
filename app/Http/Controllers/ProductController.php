@@ -114,11 +114,13 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $product_status = '';
-        if ($request->product_status) {
-            $product_status = 1;
+        if ($request->update_product_status) {
+            $product_status = "Active";
         } else {
-            $product_status = 0;
+            $product_status = "Paused";
         }
+
+
 
 //        $updated = DB::table('products')
 //        ->updateOrFail([

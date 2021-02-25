@@ -7,6 +7,7 @@
 
     <div class="card-body">
         {{ __('You are logged in!') }}
+        <h6 class="text-danger">No Role Defined</h6>
     </div>
 </div>
 @endsection
@@ -28,6 +29,7 @@
         @endif
 
         {{ __('As a guest user!') }}
+        <h3 class="text-info">Wait for Admin Approval.</h3>
     </div>
 </div>
 @endsection
