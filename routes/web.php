@@ -19,13 +19,18 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('logout', function (){
+Route::get('logout', function () {
     echo "<center><h1> No direct access </h1></center>";
 });
 
 Route::get('/', [HomeController::class, 'index']);
-Route::get('home', [HomeController::class, 'index'])->name('home');
-Route::prefix('admin')->group(function (){
+
+Route::get('{path}', [HomeController::class, 'index'])
+    ->where('path', 'home|admin')
+    ->name('home');
+
+
+Route::prefix('admin')->group(function () {
     Route::get('roles', [AdminController::class, 'manageRoles'])->name('manageRoles');
 
     Route::get('users', [AdminController::class, 'manageUsers'])->name('manageUsers');
@@ -33,7 +38,7 @@ Route::prefix('admin')->group(function (){
     Route::post('users/update', [AdminController::class, 'updateUser'])->name('updateUser');
 });
 
-Route::prefix('product')->group(function (){
+Route::prefix('product')->group(function () {
     Route::get('manage', [ProductController::class, 'index'])
         ->name('product.manage');
 
