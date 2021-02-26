@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,18 +18,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+/***********************
+ * Login / Logout Routes
+ ***********************/
 
+Auth::routes();
 Route::get('logout', function () {
     echo "<center><h1> No direct access </h1></center>";
 });
 
-Route::get('/', [HomeController::class, 'index']);
+/******************
+ * Home Page Routes
+ ******************/
 
+Route::get('/', [HomeController::class, 'index']);
 Route::get('{path}', [HomeController::class, 'index'])
     ->where('path', 'home|admin')
     ->name('home');
 
+/***************
+ * Admin Routes
+ ***************/
 
 Route::prefix('admin')->group(function () {
     Route::get('roles', [AdminController::class, 'manageRoles'])->name('manageRoles');
@@ -37,6 +47,10 @@ Route::prefix('admin')->group(function () {
     Route::get('users/remove/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
     Route::post('users/update', [AdminController::class, 'updateUser'])->name('updateUser');
 });
+
+/********************
+ * Product Routes
+ ********************/
 
 Route::prefix('product')->group(function () {
     Route::get('manage', [ProductController::class, 'index'])
@@ -56,4 +70,16 @@ Route::prefix('product')->group(function () {
 
     Route::post('update', [ProductController::class, 'update'])
         ->name('product.update');
+
+    Route::get('find', [SalesController::class, 'findProduct'])
+        ->name('product.find');
+});
+
+
+/****************
+ * Seller Routes
+ ****************/
+Route::prefix('sell')->group(function () {
+    Route::get('/', [SalesController::class, 'index'])
+        ->name('sell');
 });

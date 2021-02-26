@@ -13,7 +13,7 @@
     <script src="{{ asset('js/app.js') }}"></script>
 {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--}}
 
-<!-- Fonts -->
+    <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
@@ -32,29 +32,28 @@
     {{--    navigation bar  as component--}}
     <x-navbar/>
     {{--    navigation bar --}}
+        <main class="py-4">
+            <div class="container ">
+                <div class="row justify-content-center">
+                    {{--  left menu--}}
+                    <div class="col-md-3">
 
-    <main class="py-4">
-        <div class="container ">
-            <div class="row justify-content-center">
-                {{--  left menu--}}
-                <div class="col-md-4">
+                        @yield('menu')
 
-                    @yield('menu')
+                    </div>
+                    {{-- left menu end --}}
 
+
+                    {{-- right side content --}}
+                    <div class="col-md-9">
+
+                        @yield('content')
+
+                    </div>
+                    {{-- content end --}}
                 </div>
-                {{-- left menu end --}}
-
-
-                {{-- right side content --}}
-                <div class="col-md-8">
-
-                    @yield('content')
-
-                </div>
-                {{-- content end --}}
             </div>
-        </div>
-    </main>
+        </main>
 
     {{--  footer section   --}}
     <footer class="fixed-bottom">

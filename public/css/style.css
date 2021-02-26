@@ -10,3 +10,35 @@ a.edit-modal{
 .table-wrapper{
     overflow: auto;
 }
+
+.search{
+    height: auto;
+    overflow: auto;
+}
+.search, .user_detail, .invoice{
+    border-color: rgba(0, 0, 0, 0.125);
+}
+
+.product_title{
+    font-weight: bold;
+}
+
+.price{
+    color: darkred;
+}
+.price::before{
+    content: '৳';
+}
+
+.total_price{
+    margin-top: 10px;
+    padding-top: 10px;
+    text-align: end;
+}
+.total-wrap{
+
+}
+.price-wrap{
+    /*position: absolute;*/
+    /*bottom: 0;*/
+}

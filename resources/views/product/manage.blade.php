@@ -117,7 +117,7 @@
                 {{--                modal body with form to submit  --}}
                 <div class="modal-body">
 
-                    <form id="update-item"  autocomplete="off">
+                    <form id="update-item" autocomplete="off">
                         @csrf
                         <input type="hidden" id="update-product_id" name="product_id_to_update" value="">
 
@@ -146,7 +146,8 @@
                         <div class="form-group row">
                             <label for="product_details" class="col col-form-label">Product Details</label>
                             <div class="col-10">
-                                <textarea class="form-control" id="update-product_details" value="{{ old('product_details') }}"
+                                <textarea class="form-control" id="update-product_details"
+                                          value="{{ old('product_details') }}"
                                           name="product_details"></textarea>
                             </div>
                         </div>
@@ -192,7 +193,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="update-product-submit" form="update-item">Save changes</button>
+                    <button type="submit" class="btn btn-primary" id="update-product-submit" form="update-item">Save
+                        changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -211,7 +214,8 @@
                     {{ __('Inventory') }}
                 </div>
                 <div class="col text-right">
-                    <button class="btn btn-sm btn-success" id="add-product-btn" data-toggle="modal" data-target="#addProduct">
+                    <button class="btn btn-sm btn-success" id="add-product-btn" data-toggle="modal"
+                            data-target="#addProduct">
                         Add Product
                     </button>
                 </div>
@@ -247,10 +251,10 @@
 
             {{--main content section --}}
             <div class="row">
-                <div class="col">
+                <div class="col-12">
                     <div class="table-wrapper">
 
-                        <table class="table table-bordered table-striped product-datatable" id="product_table">
+                        <table class="table table-bordered table-striped product_datatable" id="product_table">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -280,11 +284,16 @@
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script type="text/javascript" src="//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.5/b-colvis-1.6.5/b-html5-1.6.5/b-print-1.6.5/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/b-1.6.5/b-colvis-1.6.5/b-html5-1.6.5/b-print-1.6.5/datatables.min.js"></script>
 
     <script type="text/javascript">
         {{--    initialize data table    --}}
         $(function () {
-            var table = $('.product-datatable').DataTable({
+            var table = $('.product_datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('product.all') }}",
@@ -297,47 +306,51 @@
                     {data: 'buying_price', name: 'buying_price'},
                     {data: 'selling_price', name: 'selling_price'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
+                ],
+                dom: 'Bfrtlip',
+                buttons: [
+                    'excel', 'pdf', 'print'
                 ]
             });
         });
 
         // delete product
-        $(document).on('click', '.delete', function (){
-           var id = $(this).data('id');
-           var confirmation = confirm('Delete this product?');
-           if (confirmation){
-               $.ajax({
-                   url: "{{route('product.remove')}}",
-                   data: {id:id},
-                   method: "get",
-                   success: function (data) {
-                       // alert(data);
-                       $('.product-datatable').DataTable().ajax.reload();
-                   },
-                   error: function (data){
-                       console.log(data);
-                   }
-               });
-           }
-               // console.log(id);
+        $(document).on('click', '.delete', function () {
+            var id = $(this).data('id');
+            var confirmation = confirm('Delete this product?');
+            if (confirmation) {
+                $.ajax({
+                    url: "{{route('product.remove')}}",
+                    data: {id: id},
+                    method: "get",
+                    success: function (data) {
+                        // alert(data);
+                        $('.product_datatable').DataTable().ajax.reload();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            // console.log(id);
         });
 
         // add product
 
-        $(document).on('click', '#add-product-btn', function (){
-           $('#addProduct').modal('show');
+        $(document).on('click', '#add-product-btn', function () {
+            $('#addProduct').modal('show');
         });
 
 
         //    update product data
-        $(document).on('click', '.edit', function (){
+        $(document).on('click', '.edit', function () {
             var id = $(this).data('id');
             $.ajax({
                 url: "{{route('product.edit')}}",
                 method: 'get',
-                data: {id:id},
+                data: {id: id},
                 dataType: 'json',
-                success: function (data){
+                success: function (data) {
                     // console.log(data);
                     $('#update-product_id').val(data.id);
                     $('#update-isbn').val(data.isbn);
@@ -349,7 +362,7 @@
                     // $('#update').val(data.);
 
                 },
-                error: function (data){
+                error: function (data) {
                     console.log(data);
                 }
 
@@ -358,23 +371,23 @@
             $('#updateProduct').modal('show');
         });
 
-        $('#update-item').on('submit', function (event){
+        $('#update-item').on('submit', function (event) {
             event.preventDefault();
 
             var formData = $(this).serialize();
             // console.log(formData);
 
             $.ajax({
-               url: "{{route('product.update')}}",
+                url: "{{route('product.update')}}",
                 method: 'POST',
                 data: formData,
                 dataType: 'json',
-                success: function (data){
-                   console.log(data);
-                    $('.product-datatable').DataTable().ajax.reload();
+                success: function (data) {
+                    console.log(data);
+                    $('.product_datatable').DataTable().ajax.reload();
                     $('#updateProduct').modal('hide');
                 },
-                error: function (data){
+                error: function (data) {
                     console.log(data);
                     alert("Error updating data!")
                 }
