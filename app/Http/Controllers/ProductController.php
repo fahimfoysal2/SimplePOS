@@ -43,9 +43,9 @@ class ProductController extends Controller
         $product_status = '';
 
         if ($request->product_status) {
-            $product_status = 1;
+            $product_status = "Active";
         } else {
-            $product_status = 0;
+            $product_status = "Paused";
         }
 
         $product = [

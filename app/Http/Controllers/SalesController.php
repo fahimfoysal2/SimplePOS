@@ -28,7 +28,7 @@ class SalesController extends Controller
                 ->get(['id', 'name', 'selling_price', 'inventory_size' ]);
 
             if (sizeof($product) == 0){
-                $product = "Not Found";
+                $product[] = 0;
             }
 
             return response()->json($product);

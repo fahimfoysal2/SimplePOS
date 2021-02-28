@@ -61,7 +61,7 @@
                                 </div>
                             </div>
 
-                            <ul class="found_products">
+                            <ul class="list-group found_products">
 
                             </ul>
                         </div>
@@ -79,10 +79,10 @@
                     <div class="invoice border rounded h-100">
                         {{-------- Product invoice table ------------}}
 
-                        <table class="table table-responsive-sm">
+                        <table class="table table-responsive-sm" id="product_table">
                             <thead class="thead-light">
                             <tr>
-                                <th scope="col">#</th>
+
                                 <th scope="col">Product Title</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Price</th>
@@ -90,43 +90,36 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <th scope="row">1</th>
+
                                 <td class="product_title">Pen</td>
                                 <td class="quantity">5</td>
                                 <td class="price">25</td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
+
                                 <td class="product_title">a very long text in product name</td>
                                 <td class="quantity">10</td>
                                 <td class="price">100</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
+
                                 <td class="product_title">Larry</td>
                                 <td class="quantity">3</td>
                                 <td class="price">27</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
+
                                 <td class="product_title">Larry</td>
                                 <td class="quantity">3</td>
                                 <td class="price">27</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
+
                                 <td class="product_title">Larry</td>
                                 <td class="quantity">3</td>
                                 <td class="price">27</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
-                                <td class="product_title">Larry</td>
-                                <td class="quantity">3</td>
-                                <td class="price">27</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
                                 <td class="product_title">Larry</td>
                                 <td class="quantity">3</td>
                                 <td class="price">27</td>
@@ -161,7 +154,7 @@
 @section('page-script')
     <script>
         $(document).ready(function () {
-
+            // delay function
             function throttle(f, delay) {
                 var timer = null;
                 return function () {
@@ -174,7 +167,7 @@
                 };
             }
 
-
+            // search in database after 1 sec of input
             $("#search_product").on('keyup', throttle(function () {
                 var _inp = $(this).val();
                 if (_inp.length >= 3) {
@@ -185,23 +178,35 @@
                         data: {key: _inp},
                         dataType: 'json',
                         success: function (data) {
-                            console.log(data);
+                            // console.log(data);
                             $(".found_products").empty();
-
-                            $.each(data, function (id,product) {
+                            if (data[0] == 0) {
                                 $(".found_products").append(
-                                    "<li>"+
-                                    product.name +'('+ product.inventory_size +')'
-                                    +"</li>"
+                                    "<li class='list-group-item'>" +
+                                    "Not found!"
+                                    + "</li>"
                                 );
-                            });
+                            } else {
+                                $.each(data, function (id, product) {
+                                    $(".found_products").append(
+                                        "<li class='list-group-item'>" +
+                                        product.name +
+                                        "<span class='ml-1 badge badge-primary'>" +
+                                        product.inventory_size
+                                        + "</span>" +
+                                        "<span class='float-right add_cart'><button onclick='addToCart()'> ➕</button></span>"
+                                        + "</li>"
+                                    );
+                                });
+                            }
                         },
                         error: function (data) {
                             console.log(data);
                         }
                     });
-                }else{
+                } else {
                     $(".found_products").empty();
+                    return 0;
                 }
             }));
 
@@ -211,5 +216,17 @@
                 }
             });
         });
+
+        // add product to list from search
+        function addToCart(){
+            console.log("xxxx");
+            $("#product_table").append(
+                `<tr>
+                        <td class="product_title">q</td>
+                        <td class="quantity">w</td>
+                        <td class="price">e</td>
+                    </tr>`
+            );
+        }
     </script>
 @endsection
