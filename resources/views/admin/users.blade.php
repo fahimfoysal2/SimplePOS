@@ -37,6 +37,20 @@
                                 <label for="email" class="col-form-label">Email:</label>
                                 <input type="email" class="form-control" id="email" name="email">
                             </div>
+
+
+                            <div class="form-group">
+                                <label for="role" id="role" class="col-form-label">Role:</label>
+                                {{--<input type="role" class="form-control" id="role" name="role">--}}
+                                <select name="role" class="form-select form-control" aria-label=".form-select-sm role">
+                                    <option value="-1" selected>Open this select menu</option>
+                                    <option value="1">Seller</option>
+                                    <option value="2">Manager</option>
+                                    <option value="3">Admin</option>
+                                    <option value="0">Guest</option>
+                                </select>
+                            </div>
+
                             <div class="form-group">
                                 <label for="password" class="col-form-label">Password:</label>
                                 <input type="password" class="form-control" id="password" name="password">
@@ -68,11 +82,14 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Email</th>
                     <th scope="col">Manage</th>
                 </tr>
                 </thead>
                 <tbody>
+
+                {{--                                {{dd($users)}}--}}
 
                 @foreach($users as $user)
                     <tr>
@@ -81,6 +98,10 @@
                         </td>
                         <td>
                             {{ $user->name }}
+                        </td>
+                        <td>
+                            {{--if any of these users doesn't have role, it will throw error--}}
+                            {{ !empty($user->role) ? $user->role->role_name:'Pending Approval' }}
                         </td>
                         <td>
                             {{ $user->email }}
@@ -102,7 +123,7 @@
 
 @section('page-script')
     <script>
-        $('.edit-modal').click(function (event){
+        $('.edit-modal').click(function (event) {
             event.preventDefault();
             var user = this.id;
             var userData = ($(this).data());
