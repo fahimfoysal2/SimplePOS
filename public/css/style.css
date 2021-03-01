@@ -42,3 +42,7 @@ a.edit-modal{
     /*position: absolute;*/
     /*bottom: 0;*/
 }
+
+#submit_purchase{
+    display: none;
+}

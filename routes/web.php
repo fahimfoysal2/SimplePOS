@@ -82,4 +82,10 @@ Route::prefix('product')->group(function () {
 Route::prefix('sell')->group(function () {
     Route::get('/', [SalesController::class, 'index'])
         ->name('sell');
+
+    Route::get('toCart', [SalesController::class, "getOneProduct"])
+        ->name('tocart');
+
+    Route::get('complete', [SalesController::class, "completeSell"])
+        ->name('sell.complete');
 });

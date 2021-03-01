@@ -32,7 +32,8 @@
                                     </div>
                                     <input type="text" required class="form-control" placeholder="Customer Name"
                                            aria-label="customer_name"
-                                           aria-describedby="customer_name">
+                                           aria-describedby="customer_name"
+                                           id="customer_name">
                                 </div>
 
                                 <div class="input-group mb-1">
@@ -41,7 +42,8 @@
                                     </div>
                                     <input type="text" required class="form-control" placeholder="Mobile No."
                                            aria-label="customer_phone"
-                                           aria-describedby="customer_phone">
+                                           aria-describedby="customer_phone"
+                                           id="customer_mobile">
                                 </div>
                             </div>
                         </div>
@@ -69,8 +71,8 @@
 
 
                         <div class="sell_action mt-3 text-center">
-                            <button class="btn btn-danger">Cancel</button>
-                            <button class="btn btn-success">Complete</button>
+                            <button class="btn btn-danger" onclick="cancelSell()">Cancel</button>
+                            <button class="btn btn-success" id="complete_sell">Complete</button>
                         </div>
                     </div>
                 </div>
@@ -89,43 +91,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-
-                                <td class="product_title">Pen</td>
-                                <td class="quantity">5</td>
-                                <td class="price">25</td>
-                            </tr>
-                            <tr>
-
-                                <td class="product_title">a very long text in product name</td>
-                                <td class="quantity">10</td>
-                                <td class="price">100</td>
-                            </tr>
-                            <tr>
-
-                                <td class="product_title">Larry</td>
-                                <td class="quantity">3</td>
-                                <td class="price">27</td>
-                            </tr>
-                            <tr>
-
-                                <td class="product_title">Larry</td>
-                                <td class="quantity">3</td>
-                                <td class="price">27</td>
-                            </tr>
-                            <tr>
-
-                                <td class="product_title">Larry</td>
-                                <td class="quantity">3</td>
-                                <td class="price">27</td>
-                            </tr>
-                            <tr>
-                                <td class="product_title">Larry</td>
-                                <td class="quantity">3</td>
-                                <td class="price">27</td>
-                            </tr>
-
-
+                            {{-- row from ui--}}
                             </tbody>
                         </table>
 
@@ -138,7 +104,7 @@
                                     <h2>Total</h2>
                                 </div>
                                 <div class="col-4 total_amount">
-                                    <h4 class="pr-2">1000</h4>
+                                    <h4 class="pr-2" id="total_amount">0.00</h4>
                                 </div>
                             </div>
                         </div>
@@ -149,10 +115,19 @@
 
         </div>
     </div>
+
+    <form id="submit_purchase" action="{{route("sell.complete")}}" method="POST">
+        @csrf
+        <input type="hidden" name="sell_data" id="sell_data" value="dddd">
+    </form>
+
 @endsection
 
 @section('page-script')
     <script>
+        // sell information
+        var sell_info = {};
+
         $(document).ready(function () {
             // delay function
             function throttle(f, delay) {
@@ -188,13 +163,14 @@
                                 );
                             } else {
                                 $.each(data, function (id, product) {
+                                    // console.log(product);
                                     $(".found_products").append(
                                         "<li class='list-group-item'>" +
                                         product.name +
                                         "<span class='ml-1 badge badge-primary'>" +
                                         product.inventory_size
                                         + "</span>" +
-                                        "<span class='float-right add_cart'><button onclick='addToCart()'> ➕</button></span>"
+                                        "<span class='float-right add_cart'><button onclick='addToCart(\"" + product.id + "\")'> ➕</button></span>"
                                         + "</li>"
                                     );
                                 });
@@ -215,18 +191,83 @@
                     $(".found_products").empty();
                 }
             });
+
+
+            //    add customer info to list
+            $("#customer_name").on('keyup', throttle(function () {
+                sell_info.customer_name = $(this).val();
+                // console.log(sell_info);
+            }));
+
+            $("#customer_mobile").on('keyup', throttle(function () {
+                sell_info.customer_mobile = $(this).val();
+                // console.log(sell_info);
+            }));
+
+
+            // ------------- complete sell
+
+            $("#complete_sell").on('click', function () {
+                // var input = $("<input>")
+                //     .attr("type", "hidden")
+                //     .attr("name", "mydata").val(sell_info);
+                // $('#submit_purchase').append(input);
+
+                // $("#submit_purchase").submit();
+                $.ajax({
+                    url: "{{route('sell.complete')}}",
+                    method: 'get',
+                    data: {sell_info},
+                    dataType: 'json',
+                    success: function (data) {
+                        alert("Purchase Complete");
+                        location.reload();
+
+                        // console.log(data);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
         });
 
+        // product store to list
+        sell_info.products = [];
+
         // add product to list from search
-        function addToCart(){
-            console.log("xxxx");
-            $("#product_table").append(
-                `<tr>
-                        <td class="product_title">q</td>
-                        <td class="quantity">w</td>
-                        <td class="price">e</td>
-                    </tr>`
-            );
+        function addToCart(id) {
+            $.ajax({
+                url: "{{route('tocart')}}",
+                method: 'GET',
+                data: {key: id},
+                dataType: 'json',
+                success: function (data) {
+                    // console.log(data);
+                    sell_info.products.push({id: data.id, quantity: 1});
+
+                    $("#product_table").append(
+                        `<tr><td class="product_title"><span class="remove_item"></span>` + data.name + `</td>
+                        <td class="quantity"><input type="number" readonly class="quantity" value="1" "></td>
+                        <td class="price">` + data.selling_price + `</td></tr>`
+                    );
+
+                    current_total = Number($("#total_amount").html());
+                    current_total += data.selling_price;
+                    $("#total_amount").html(current_total);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            })
+            // console.log(id);
+        }
+
+        function cancelSell() {
+            $("#product_table> tbody").empty();
+            $("#total_amount").html('0.00');
+            $("#customer_name, #customer_mobile").val(" ");
+            sell_info = {};
         }
     </script>
 @endsection
