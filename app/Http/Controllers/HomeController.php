@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,16 +25,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user_level = Auth::id();
+        $role = User::find(Auth::id())->role;
+        $user_level = $role->role_level;
 
         switch ($user_level) {
-            case 1:
+            case 3:
                 return view('admin/admin', compact('user_level'));
 
             case 2:
                 return view('manager/manager', compact('user_level'));
 
-            case 3:
+            case 1:
                 return view('seller/seller', compact('user_level'));
 
             default:

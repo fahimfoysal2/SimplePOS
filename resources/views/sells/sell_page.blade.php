@@ -20,7 +20,7 @@
 
 
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-12 col-md-5">
                     <div class="left-wrap">
 
                         <div class="user_detail border rounded">
@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-7">
+                <div class="col-12 col-md-7">
                     <div class="invoice border rounded h-100">
                         {{-------- Product invoice table ------------}}
 
@@ -220,10 +220,10 @@
                     data: {sell_info},
                     dataType: 'json',
                     success: function (data) {
-                        alert("Purchase Complete");
-                        location.reload();
+                        // lalert("Purchase Complete");
+                        // ocation.reload();
 
-                        // console.log(data);
+                        console.log(data);
                     },
                     error: function (data) {
                         console.log(data);

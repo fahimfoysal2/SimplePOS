@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class ProductController extends Controller
@@ -13,6 +14,7 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     /**
@@ -22,6 +24,13 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $role = User::find(Auth::id())->role;
+        $user_level = $role->role_level;
+
+        if ($user_level < 2){
+            return  abort(403);
+        }
+
         return view('product/manage');
     }
 

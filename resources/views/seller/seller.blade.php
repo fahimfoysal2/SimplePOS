@@ -2,13 +2,12 @@
 
 @section('menu')
 
-<div class="card">
-    <div class="card-header">{{ __('Menu') }}</div>
+    @section('menu')
 
-    <div class="card-body">
-        {{ __('You are logged in!') }}
-    </div>
-</div>
+        @include('seller/menu')
+
+    @endsection
+
 @endsection
 <!--left menu end-->
 
@@ -17,17 +16,17 @@
 
 
 @section('content')
-<div class="card">
-    <div class="card-header">{{ __('Dashboard') }}</div>
+    <div class="card">
+        <div class="card-header">{{ __('Dashboard') }}</div>
 
-    <div class="card-body">
-        @if (session('status'))
-        <div class="alert alert-success" role="alert">
-            {{ session('status') }}
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            {{ __('As a Seller!') }}
         </div>
-        @endif
-
-        {{ __('As a Seller!') }}
     </div>
-</div>
 @endsection

@@ -6,7 +6,20 @@
     <div class="card-header">{{ __('Menu') }}</div>
 
     <div class="card-body">
-        {{ __('You are logged in!') }}
+        <ul class="list-group">
+
+            <li class="list-group-item">
+                <a href="/">Reports</a>
+            </li>
+
+            <li class="list-group-item">
+                <a href="{{route('sell')}}">Sell</a>
+            </li>
+
+            <li class="list-group-item">
+                <a href="{{route('product.manage')}}">Manage Products</a>
+            </li>
+        </ul>
     </div>
 </div>
 @endsection

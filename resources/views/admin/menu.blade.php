@@ -5,16 +5,16 @@
         <ul class="list-group">
 
             <li class="list-group-item">
-                <a href="{{route('manageRoles')}}">Reports</a>
+                <a href="/">Reports</a>
             </li>
 
             <li class="list-group-item">
                 <a href="{{route('sell')}}">Sell</a>
             </li>
 
-            <li class="list-group-item">
-                <a href="{{route('manageRoles')}}">Manage Roles</a>
-            </li>
+{{--            <li class="list-group-item">--}}
+{{--                <a href="{{route('manageRoles')}}">Manage Roles</a>--}}
+{{--            </li>--}}
 
             <li class="list-group-item">
                 <a href="{{route('manageUsers')}}">Manage Users</a>
