@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Sale;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,17 +65,24 @@ class SalesController extends Controller
      */
     public function completeSell(Request $request)
     {
-        print_r($request->all());
+//        print_r($request->all());
 
-        $user_name = $request->sell_info['customer_name'];
-        $user_phone = $request->sell_info['customer_name'];
+        // --------------------
+        $user_name = isset($request->sell_info['customer_name']) ? $request->sell_info['customer_name']:"Anonymus";
+        $user_phone = isset($request->sell_info['customer_mobile'])? $request->sell_info['customer_mobile']:"Anonymus";
+        $amount = 0;
+        // ---------------------
 
 //       make sell id
 
+
+
         $all_products = $request->sell_info['products'];
 
+
+
         $new_list = [];
-//        ---------------
+        // ---------------------
         $serialize = array_map("serialize", $all_products);
         $count     = array_count_values ($serialize);
         $unique_product    = array_unique($serialize);
@@ -86,18 +94,47 @@ class SalesController extends Controller
             $u['quantity'] = $u_count;
         }
 
-        print_r($unique_product);
-//        -------------------
+        //  -------------------
+        //  print_r($unique_product);
+        //  -------------------
         foreach ($unique_product as $product){
             $id = $product['id'];
             $quantity = $product['quantity'];
 
-//            cost calculation
-//            deduct from db
+            //---------- cost calculation -----------
+            $amount += $quantity *  $product['price'];
+            //---------- deduct from db -------------
 
-            echo $id.' '.$quantity."--";
         }
 
-        return response()->json();
+
+        // -------------- make sale ------------
+        $sale_id = $this->make_sale($user_name, $user_phone, $amount);
+
+
+
+        return response()->json($sale_id);
+    }
+
+
+    /**
+     * store sale info into sales
+     *
+     * @param $user
+     * @param $phone
+     * @param $amount
+     */
+    public function make_sale($user, $phone, $amount)
+    {
+        $seller = Auth::id();
+
+        $sale_id = Sale::create([
+            'seller_id'  => $seller,
+            'buyer_name' => $user,
+            'buyer_phone'=> $phone,
+            'amount'     => $amount,
+        ]);
+
+        return $sale_id->id;
     }
 }
