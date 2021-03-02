@@ -25,7 +25,8 @@ class ProductController extends Controller
     public function index()
     {
         $role = User::find(Auth::id())->role;
-        $user_level = $role->role_level;
+//        $user_level = $role->role_level;
+        $user_level =  !empty($role->role_level) ? $role->role_level:'0' ;
 
         if ($user_level < 2){
             return  abort(403);

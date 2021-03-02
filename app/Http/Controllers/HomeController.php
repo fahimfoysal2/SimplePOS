@@ -26,8 +26,8 @@ class HomeController extends Controller
     public function index()
     {
         $role = User::find(Auth::id())->role;
-        $user_level = $role->role_level;
-//        {{ !empty($user->role) ? $user->role->name:'' }};
+//        dd($role);
+        $user_level =  !empty($role->role_level) ? $role->role_level:'0' ;
 
         switch ($user_level) {
             case 3:

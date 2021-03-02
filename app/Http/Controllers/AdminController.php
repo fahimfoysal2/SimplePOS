@@ -23,7 +23,8 @@ class AdminController extends Controller
     public function authorize_admin()
     {
         $role = User::find(Auth::id())->role;
-        $user_level = $role->role_level;
+        $user_level =  !empty($role->role_level) ? $role->role_level:'0' ;
+//        $user_level = $role->role_level;
 
         if ($user_level == 3){
             return true;

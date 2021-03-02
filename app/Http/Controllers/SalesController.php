@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
@@ -14,6 +16,13 @@ class SalesController extends Controller
 
     public function index()
     {
+        $role = User::find(Auth::id())->role;
+        $user_level =  !empty($role->role_level) ? $role->role_level:'0' ;
+
+        if ($user_level < 2){
+            return  abort(403);
+        }
+
         return view('sells.sell_page');
     }
 
