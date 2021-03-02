@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SoldProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,21 +69,20 @@ class SalesController extends Controller
 //        print_r($request->all());
 
         // --------------------
+        // --- user & amount --
         $user_name = isset($request->sell_info['customer_name']) ? $request->sell_info['customer_name']:"Anonymus";
         $user_phone = isset($request->sell_info['customer_mobile'])? $request->sell_info['customer_mobile']:"Anonymus";
         $amount = 0;
         // ---------------------
-
-//       make sell id
 
 
 
         $all_products = $request->sell_info['products'];
 
 
-
-        $new_list = [];
-        // ---------------------
+        // --------------------------------
+        // --- make unique product list ---
+        // --------------------------------
         $serialize = array_map("serialize", $all_products);
         $count     = array_count_values ($serialize);
         $unique_product    = array_unique($serialize);
@@ -94,6 +94,7 @@ class SalesController extends Controller
             $u['quantity'] = $u_count;
         }
 
+
         //  -------------------
         //  print_r($unique_product);
         //  -------------------
@@ -103,17 +104,29 @@ class SalesController extends Controller
 
             //---------- cost calculation -----------
             $amount += $quantity *  $product['price'];
-            //---------- deduct from db -------------
-
         }
 
 
         // -------------- make sale ------------
         $sale_id = $this->make_sale($user_name, $user_phone, $amount);
+        // --------- record sold items ---------
+        $this->record_sold_items($unique_product, $sale_id);
+        //---------- deduct from db -------------
 
 
 
-        return response()->json($sale_id);
+        // --------- return response --------
+        $response = [
+            "sold"  => true,
+            "buyer"  => $user_name,
+            "phone"  => $user_phone,
+            "seller" => Auth::user()->name,
+            "sale_id" => $sale_id,
+            "items"  => $unique_product,
+            "amount" => $amount,
+        ];
+
+        return response()->json($response);
     }
 
 
@@ -136,5 +149,19 @@ class SalesController extends Controller
         ]);
 
         return $sale_id->id;
+    }
+
+    /**
+     * record sold items
+     */
+    public function record_sold_items($products, $sale_id)
+    {
+        foreach ($products as $product){
+            SoldProduct::create([
+                'sale_id'    => $sale_id,
+                'product_id' => $product['id'],
+                'quantity'   => $product['quantity'],
+            ]);
+        }
     }
 }

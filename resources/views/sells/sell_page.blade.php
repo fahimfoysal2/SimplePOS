@@ -8,6 +8,103 @@
 
 
 @section('content')
+
+    {{-------  sales modal ------  --}}
+    <!-- Modal -->
+    <div class="modal fade" id="saleModal" tabindex="-1" aria-labelledby="saleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saleModalLabel">Invoice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    {{--                    --}}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="invoice-title">
+                                    <h2>Invoice</h2>
+                                    <h3 class="pull-right">Order # <span id="order_id">12345</span></h3>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <address>
+                                            <strong>Billed To:</strong><br>
+                                            <span id="buyer_name">Buyer</span> <br>
+                                            <span id="buyer_phone">Phone</span>
+                                        </address>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <address>
+                                            <strong>Seller:</strong><br>
+                                            <span id="seller_name">Seller</span>
+                                        </address>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <address>
+                                            <strong>Order Date:</strong><br>
+                                            {{date("F j, Y, g:i a")}}
+                                            <br><br>
+                                        </address>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table id="invoice_table" class="table table-condensed">
+                                                <thead>
+                                                <tr>
+                                                    <td><strong>Item</strong></td>
+                                                    <td class="text-center"><strong>Quantity</strong></td>
+                                                    <td class="text-center"><strong>Price</strong></td>
+                                                    {{--                                                    <td class="text-right"><strong>Totals</strong></td>--}}
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {{-- from jquery sell dta--}}
+
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    {{--                                                    <td class="thick-line"></td>--}}
+                                                    <td class="thick-line"></td>
+                                                    <td class="thick-line text-center"><strong>Subtotal</strong></td>
+                                                    <td class="thick-line text-center" id="total_amount">00.00</td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{--                    --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-------  sales modal ------  --}}
+
+
+
     <div class="card">
         <div class="card-header">{{ __('Seller Panel') }}</div>
 
@@ -71,7 +168,7 @@
 
 
                         <div class="sell_action mt-3 text-center">
-                            <button class="btn btn-danger" onclick="cancelSell()">Cancel</button>
+                            <button class="btn btn-danger" onclick="clearSell()">Cancel</button>
                             <button class="btn btn-success" id="complete_sell">Complete</button>
                         </div>
                     </div>
@@ -114,6 +211,15 @@
 
 
         </div>
+
+
+        <div id="wait" style="">
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+
     </div>
 
     <form id="submit_purchase" action="{{route("sell.complete")}}" method="POST">
@@ -125,6 +231,17 @@
 
 @section('page-script')
     <script>
+
+        $(document).ajaxStart(function () {
+            $("#wait").css("display", "block");
+        });
+
+
+        $(document).ajaxComplete(function () {
+            $("#wait").css("display", "none");
+        });
+
+
         // sell information
         var sell_info = {};
 
@@ -205,7 +322,7 @@
             }));
 
 
-            // ------------- complete sell
+            // ------------- complete sell --------------
 
             $("#complete_sell").on('click', function () {
                 // var input = $("<input>")
@@ -220,13 +337,29 @@
                     data: {sell_info},
                     dataType: 'json',
                     success: function (data) {
-                        // lalert("Purchase Complete");
-                        // ocation.reload();
+                        // alert("Purchase Complete");
+                        // acation.reload();
+                        $("#order_id").html(data.sale_id);
+                        $("#buyer_name").html(data.buyer);
+                        $("#buyer_phone").html(data.phone);
+                        $("#seller_name").html(data.seller);
+                        $("#total_amount").html(data.amount);
 
+                        $.each(data.items, function (index, value) {
+                            $('#invoice_table tbody').append(`<tr><td class="item_id">` + value.id + `</td>
+<td class="text-center item_quantity">` + value.quantity + `</td>
+<td class="text-center item_price">x` + value.price + `</td></tr>`);
+                        });
+
+                        clearSell();
+                        $("#saleModal").modal('show');
                         console.log(data);
+
+
                     },
                     error: function (data) {
                         console.log(data);
+                        alert("Purchase Failed");
                     }
                 });
             });
@@ -244,7 +377,7 @@
                 dataType: 'json',
                 success: function (data) {
                     // console.log(data);
-                    sell_info.products.push({id: data.id, quantity: 1});
+                    sell_info.products.push({id: data.id, quantity: 1, price: data.selling_price});
 
                     $("#product_table").append(
                         `<tr><td class="product_title"><span class="remove_item"></span>` + data.name + `</td>
@@ -263,11 +396,13 @@
             // console.log(id);
         }
 
-        function cancelSell() {
+        function clearSell() {
             $("#product_table> tbody").empty();
             $("#total_amount").html('0.00');
             $("#customer_name, #customer_mobile").val(" ");
-            sell_info = {};
+            sell_info.products = [];
+            sell_info.customer_mobile = ' ';
+            sell_info.customer_name = ' ';
         }
     </script>
 @endsection

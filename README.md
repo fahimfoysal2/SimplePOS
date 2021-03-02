@@ -10,9 +10,11 @@ pass:
 user level  
     1 = Admin  
     2 = Manager  
-    3 = Seller  
+    3 = Seller
+    0 = guest
     default / new user, without role = guest
 ---
 
-todo  
-admin only , manager only access control options in controller
+Admin / initial login:
+admin@mail.com
+12345678

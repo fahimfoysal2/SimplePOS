@@ -1,48 +1,65 @@
-footer{
-    background-color: rgba(0,0,0,0.08);
+footer {
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
-a.edit-modal{
+a.edit-modal {
     text-decoration: none;
     cursor: pointer;
 }
 
-.table-wrapper{
+.table-wrapper {
     overflow: auto;
 }
 
-.search{
+.search {
     height: auto;
     overflow: auto;
 }
-.search, .user_detail, .invoice{
+
+.search, .user_detail, .invoice {
     border-color: rgba(0, 0, 0, 0.125);
 }
 
-.product_title{
+.product_title {
     font-weight: bold;
 }
 
-.price{
+.price {
     color: darkred;
 }
-.price::before{
+
+.price::before {
     content: '৳';
 }
 
-.total_price{
+.total_price {
     margin-top: 10px;
     padding-top: 10px;
     text-align: end;
 }
-.total-wrap{
+
+.total-wrap {
 
 }
-.price-wrap{
+
+.price-wrap {
     /*position: absolute;*/
     /*bottom: 0;*/
 }
 
-#submit_purchase{
+#submit_purchase {
     display: none;
+}
+
+#wait {
+    display: none;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 2px;
+    background-color: #ff0909;
+    backdrop-filter: blur(5px);
 }
