@@ -67,7 +67,7 @@
                                             <table id="invoice_table" class="table table-condensed">
                                                 <thead>
                                                 <tr>
-                                                    <td><strong>Item</strong></td>
+                                                    <td><strong>Item U. ID</strong></td>
                                                     <td class="text-center"><strong>Quantity</strong></td>
                                                     <td class="text-center"><strong>Price</strong></td>
                                                     {{--                                                    <td class="text-right"><strong>Totals</strong></td>--}}
@@ -82,7 +82,7 @@
                                                     {{--                                                    <td class="thick-line"></td>--}}
                                                     <td class="thick-line"></td>
                                                     <td class="thick-line text-center"><strong>Subtotal</strong></td>
-                                                    <td class="thick-line text-center" id="total_amount">00.00</td>
+                                                    <td class="thick-line text-center" id="invoice_total_amount">00.00</td>
                                                 </tr>
                                                 </tfoot>
                                             </table>
@@ -343,7 +343,7 @@
                         $("#buyer_name").html(data.buyer);
                         $("#buyer_phone").html(data.phone);
                         $("#seller_name").html(data.seller);
-                        $("#total_amount").html(data.amount);
+                        $("#invoice_total_amount").html(data.amount);
 
                         $.each(data.items, function (index, value) {
                             $('#invoice_table tbody').append(`<tr><td class="item_id">` + value.id + `</td>

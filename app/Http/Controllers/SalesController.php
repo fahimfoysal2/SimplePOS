@@ -21,7 +21,7 @@ class SalesController extends Controller
         $role = User::find(Auth::id())->role;
         $user_level =  !empty($role->role_level) ? $role->role_level:'0' ;
 
-        if ($user_level < 2){
+        if ($user_level < 1){
             return  abort(403);
         }
 
@@ -39,8 +39,8 @@ class SalesController extends Controller
         if ($request->ajax()) {
 
             $product = Product::query()
-                ->where('name', 'LIKE', "%{$request->key}%")
-                ->orWhere('isbn', 'LIKE', "%{$request->key}%")
+                ->where('name', 'LIKE', "%".$request->key."%")
+                ->orWhere('isbn', 'LIKE', "%".$request->key."%")
                 ->where('item_status', '=', 'Active')
                 ->get(['id', 'name', 'selling_price', 'inventory_size']);
 

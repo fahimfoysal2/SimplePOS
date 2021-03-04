@@ -15,8 +15,9 @@ class AddUserToRolesTable extends Migration
     {
         Schema::table('roles', function (Blueprint $table) {
             $table->foreignId('user_id')
+                ->after('id')
                 ->constrained()
-                ->after('id');
+                ->onDelete('cascade');
         });
     }
 
