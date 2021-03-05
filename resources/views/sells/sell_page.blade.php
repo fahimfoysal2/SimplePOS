@@ -353,7 +353,7 @@
 
                         clearSell();
                         $("#saleModal").modal('show');
-                        console.log(data);
+                        // console.log(data);
 
 
                     },
